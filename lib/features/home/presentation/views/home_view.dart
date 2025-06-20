@@ -24,13 +24,22 @@ class HomeView extends StatelessWidget {
             CustomButton(
               onPressed: () async{
                 await LocalNotificationsServices.showRepeatedNotification(
-                  title: 'TEST BASIC',
+                  title: 'TEST REPEATED',
                   body: 'Mahmoud sent a message',
                 );
               },
               title: 'Periodic',
             ),
-
+            CustomButton(
+              onPressed: () async{
+                await LocalNotificationsServices.showScheduledNotification(
+                  title: 'TEST SCHEDULED',
+                  body: 'Mahmoud sent a message',
+                  time: DateTime.now().add(Duration(seconds: 5)),
+                );
+              },
+              title: 'Scheduled',
+            ),
             CustomButton(
               color: Colors.red,
               onPressed: () async{

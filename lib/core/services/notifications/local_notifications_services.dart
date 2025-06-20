@@ -1,6 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
+
 
 class LocalNotificationsServices {
   static FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -48,7 +51,7 @@ class LocalNotificationsServices {
         channelName?? 'basic notification',
         importance: importance?? Importance.max,
         priority: priority?? Priority.high,
-        sound: RawResourceAndroidNotificationSound((soundName ?? 'sound.mp3').split('.').first)
+        sound: RawResourceAndroidNotificationSound((soundName ?? 'sound.mp3').split('.').first),
     );
     NotificationDetails details = NotificationDetails(
       android: android,
@@ -79,7 +82,7 @@ class LocalNotificationsServices {
       channelName?? 'repeated notification',
       importance: importance?? Importance.max,
       priority:priority?? Priority.high,
-       sound: RawResourceAndroidNotificationSound((soundName ?? 'sound.mp3').split('.').first)
+       sound: RawResourceAndroidNotificationSound((soundName ?? 'sound.mp3').split('.').first),
      );
     NotificationDetails details = NotificationDetails(
       android: android,
@@ -92,6 +95,51 @@ class LocalNotificationsServices {
       details,
       payload: payload,
       androidScheduleMode: AndroidScheduleMode.alarmClock,
+    );
+  }
+
+  static Future<void> showScheduledNotification({
+    required String title,
+    required String body,
+    required DateTime time,
+    int? id,
+    String? payload,
+    String? channelName,
+    String? channelId,
+    Importance? importance,
+    Priority? priority,
+    String? soundName,
+  }) async {
+     AndroidNotificationDetails android = AndroidNotificationDetails(
+      channelId ?? 'scheduled id',
+      channelName ?? 'scheduled notification',
+      importance: importance?? Importance.max,
+      priority: priority?? Priority.high,
+      sound: RawResourceAndroidNotificationSound((soundName ?? 'sound.mp3').split('.').first),
+     );
+     NotificationDetails details = NotificationDetails(
+      android: android,
+    );
+    tz.initializeTimeZones();
+    final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+    await notificationsPlugin.zonedSchedule(
+      id?? 1,
+      title,
+      body,
+      // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10)),
+      tz.TZDateTime(
+        tz.local,
+        time.year,
+        time.month,
+        time.day,
+        time.hour,
+        time.minute,
+        time.second,
+      ),
+      details,
+      payload: payload,
+      androidScheduleMode:  AndroidScheduleMode.alarmClock,
     );
   }
 
