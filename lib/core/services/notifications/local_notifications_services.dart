@@ -143,6 +143,57 @@ class LocalNotificationsServices {
     );
   }
 
+
+  static void showDailyScheduledNotification({
+    required String title,
+    required String body,
+    required DateTime time,
+    int? id,
+    String? payload,
+    String? channelName,
+    String? channelId,
+    Importance? importance,
+    Priority? priority,
+    String? soundName,
+  }) async {
+     AndroidNotificationDetails android = AndroidNotificationDetails(
+      channelId?? 'daily scheduled id',
+      channelName?? 'daily scheduled',
+      importance:importance ?? Importance.max,
+      priority:priority?? Priority.high,
+    );
+    NotificationDetails details = NotificationDetails(
+      android: android,
+    );
+    tz.initializeTimeZones();
+    final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+    var currentTime = tz.TZDateTime.now(tz.local);
+    var scheduleTime = tz.TZDateTime(
+      tz.local,
+      time.year,
+      time.month,
+      time.day,
+      time.hour,
+      time.minute,
+      time.second,
+    );
+    if (scheduleTime.isBefore(currentTime)) {
+      scheduleTime = scheduleTime.add(const Duration(days: 1));
+    }
+    await notificationsPlugin.zonedSchedule(
+      id ?? 1,
+      title,
+      body,
+      // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10)),
+      scheduleTime,
+      details,
+      payload: payload,
+      androidScheduleMode:  AndroidScheduleMode.alarmClock,
+
+    );
+  }
+
   static Future<void> cancelNotification(int id)async{
    await notificationsPlugin.cancel(id);
   }
