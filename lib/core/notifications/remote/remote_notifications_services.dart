@@ -45,6 +45,7 @@ class RemoteNotificationsServices {
     String? image,
 }) async {
     String serverKey = await ServerKey.getServerToken();
+    String projectId = 'notifications-7ae71';
     await Dio(
       BaseOptions(
         headers: {
@@ -53,7 +54,7 @@ class RemoteNotificationsServices {
         },
       ),
     ).post(
-      'https://fcm.googleapis.com/v1/projects/notifications-7ae71/messages:send',
+      'https://fcm.googleapis.com/v1/projects/$projectId/messages:send',
       data: {
         "message": {
           if (topic != null) "topic": topic else "token": to,
