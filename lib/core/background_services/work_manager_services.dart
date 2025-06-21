@@ -1,5 +1,5 @@
 import 'package:workmanager/workmanager.dart';
-import '../notifications/local_notifications_services.dart';
+import '../notifications/local/local_notifications_services.dart';
 
 class WorkManagerServices {
   static Future<void> registerMyPeriodicNotificationTask({

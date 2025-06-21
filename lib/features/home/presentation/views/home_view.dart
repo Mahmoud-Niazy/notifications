@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:notifications/core/services/notifications/local_notifications_services.dart';
+import 'package:notifications/core/notifications/local/local_notifications_services.dart';
+import 'package:notifications/core/notifications/remote/remote_notifications_services.dart';
 import 'package:notifications/features/home/presentation/views/widgets/custom_button.dart';
 
-import '../../../../core/services/background_services/work_manager_services.dart';
+import '../../../../core/background_services/work_manager_services.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -59,6 +60,17 @@ class HomeView extends StatelessWidget {
               title: 'Daily Scheduled',
             ),
 
+            CustomButton(
+              onPressed: () async{
+                await RemoteNotificationsServices.sendNotification(
+                  to: '',
+                  title: 'TEST REMOTE',
+                  body: 'mahmoud sent a message',
+                  image: 'https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg',
+                );
+              },
+              title: 'Remote',
+            ),
             CustomButton(
               color: Colors.red,
               onPressed: () async{
