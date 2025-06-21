@@ -10,7 +10,7 @@ class ServerKey {
     ];
     final client = await clientViaServiceAccount(
         ServiceAccountCredentials.fromJson(
-            {}
+            {},
         ),
         scopes);
     final accessServerKey = client.credentials.accessToken.data;
