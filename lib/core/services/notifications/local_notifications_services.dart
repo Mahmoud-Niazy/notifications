@@ -143,8 +143,7 @@ class LocalNotificationsServices {
     );
   }
 
-
-  static void showDailyScheduledNotification({
+  static Future<void> showDailyScheduledNotification({
     required String title,
     required String body,
     required DateTime time,
@@ -161,7 +160,8 @@ class LocalNotificationsServices {
       channelName?? 'daily scheduled',
       importance:importance ?? Importance.max,
       priority:priority?? Priority.high,
-    );
+       sound: RawResourceAndroidNotificationSound((soundName ?? 'sound.mp3').split('.').first),
+     );
     NotificationDetails details = NotificationDetails(
       android: android,
     );

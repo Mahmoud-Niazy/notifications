@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:notifications/core/services/notifications/local_notifications_services.dart';
 import 'package:notifications/features/home/presentation/views/widgets/custom_button.dart';
 
+import '../../../../core/services/background_services/work_manager_services.dart';
+
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
@@ -40,6 +42,23 @@ class HomeView extends StatelessWidget {
               },
               title: 'Scheduled',
             ),
+            CustomButton(
+              onPressed: () async{
+                await WorkManagerServices.init(
+                  title: 'TEST DAILY SCHEDULED',
+                  body: 'Mahmoud sent a message',
+                  time: DateTime(
+                    2025,
+                    6,
+                    21,
+                    2,
+                    51,
+                  ),
+                );
+              },
+              title: 'Daily Scheduled',
+            ),
+
             CustomButton(
               color: Colors.red,
               onPressed: () async{
