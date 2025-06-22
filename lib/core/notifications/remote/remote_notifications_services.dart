@@ -8,21 +8,27 @@ class RemoteNotificationsServices {
 
   static Future init() async {
     await messaging.requestPermission();
+
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
     FirebaseMessaging.onMessage.listen(handleForegroundMessage);
+
+    // called when press on notification while app is open
+    FirebaseMessaging.onMessageOpenedApp.listen(onMessageOpenedApp);
+
+    // called when press on notification while app is terminated
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      getInitialMessage(message);
+    });
   }
 
-  static Future<String?> getFcmToken() async {
-    String? fcmToken = await messaging.getToken();
-    return fcmToken;
+  static Future<void> onMessageOpenedApp(RemoteMessage message) async {
+    // await Firebase.initializeApp();
+    /// IMPLEMENT YOUR ACTION
   }
 
-  static Future<void> subscribeToTopic(String topic) async {
-    await messaging.subscribeToTopic(topic);
-  }
-
-  static Future<void> unsubscribeToTopic(String topic) async {
-    await messaging.unsubscribeFromTopic(topic);
+  static Future<void> getInitialMessage(RemoteMessage? message) async {
+    // await Firebase.initializeApp();
+    /// IMPLEMENT YOUR ACTION
   }
 
   static Future<void> handleBackgroundMessage(RemoteMessage message) async {
@@ -35,6 +41,20 @@ class RemoteNotificationsServices {
       title: message.notification?.title ?? '',
       body: message.notification?.body ?? '',
     );
+  }
+
+
+  static Future<String?> getFcmToken() async {
+    String? fcmToken = await messaging.getToken();
+    return fcmToken;
+  }
+
+  static Future<void> subscribeToTopic(String topic) async {
+    await messaging.subscribeToTopic(topic);
+  }
+
+  static Future<void> unsubscribeToTopic(String topic) async {
+    await messaging.unsubscribeFromTopic(topic);
   }
 
   static Future<void> sendNotification({
