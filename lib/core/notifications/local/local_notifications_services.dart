@@ -4,6 +4,8 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 
+import '../../background_services/work_manager_services.dart';
+
 
 class LocalNotificationsServices {
   static FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -24,14 +26,16 @@ class LocalNotificationsServices {
     );
   }
 
-  static addNotificationToStream (NotificationResponse notification){
-   notificationsStreamController.add(notification);
+  static addNotificationToStream (NotificationResponse? notification){
+   if(notification!= null) {
+     notificationsStreamController.add(notification);
+   }
   }
 
-  static void onDidReceiveBackgroundNotificationResponse(NotificationResponse notification){
+  static void onDidReceiveBackgroundNotificationResponse(NotificationResponse? notification){
     addNotificationToStream(notification);
   }
-  static void onDidReceiveNotificationResponse(NotificationResponse notification){
+  static void onDidReceiveNotificationResponse(NotificationResponse? notification){
     addNotificationToStream(notification);
   }
 
@@ -143,7 +147,7 @@ class LocalNotificationsServices {
     );
   }
 
-  static Future<void> showDailyScheduledNotification({
+  static Future<void> handleDailyScheduledNotification({
     required String title,
     required String body,
     required DateTime time,
@@ -190,7 +194,18 @@ class LocalNotificationsServices {
       details,
       payload: payload,
       androidScheduleMode:  AndroidScheduleMode.alarmClock,
+    );
+  }
 
+  static Future<void> showDailyScheduledNotification({
+    required String title,
+    required String body,
+    required DateTime time,
+})async{
+    await WorkManagerServices.init(
+      title: title,
+      body: body,
+      time: time,
     );
   }
 

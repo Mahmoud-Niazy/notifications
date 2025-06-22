@@ -3,11 +3,24 @@ import 'package:notifications/core/notifications/local/local_notifications_servi
 import 'package:notifications/core/notifications/remote/remote_notifications_services.dart';
 import 'package:notifications/features/home/presentation/views/widgets/custom_button.dart';
 
-import '../../../../core/background_services/work_manager_services.dart';
-
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  void listenToNotificationStreamController(){
+    LocalNotificationsServices.notificationsStreamController.stream.listen((notification){
+      ///
+    });
+  }
+  @override
+  void initState() {
+    listenToNotificationStreamController();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +58,7 @@ class HomeView extends StatelessWidget {
             ),
             CustomButton(
               onPressed: () async{
-                await WorkManagerServices.init(
+               await LocalNotificationsServices.showDailyScheduledNotification(
                   title: 'TEST DAILY SCHEDULED',
                   body: 'Mahmoud sent a message',
                   time: DateTime(

@@ -46,7 +46,7 @@ class WorkManagerServices {
   @pragma('vm:entry-point')
   static void handleDailyNotification(){
     Workmanager().executeTask((taskName, inputData) async{
-      await LocalNotificationsServices.showDailyScheduledNotification(
+      await LocalNotificationsServices.handleDailyScheduledNotification(
         title: inputData?['title'] ?? '',
         body:  inputData?['body'] ?? '',
         time: (inputData!=null &&
